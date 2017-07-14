@@ -2,7 +2,8 @@ name: jaguar_recaptcha
 description: reCAPTCHA server side support Dart and Jaguar.dart
 version: 0.0.1-dev
 author: Ravi Teja Gudapati <tejainece@gmail.com>
-#homepage: https://www.example.com
+homepage: https://github.com/Jaguar-dart/jaguar_recaptcha
+documentation:
 
 environment:
   sdk: '>=1.20.1 <2.0.0'

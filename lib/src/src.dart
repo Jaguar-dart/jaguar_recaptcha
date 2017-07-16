@@ -6,6 +6,7 @@ library jaguar_recaptcha.src;
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart';
+import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_client/jaguar_client.dart';
 import 'package:jaguar_serializer/serializer.dart';
 
@@ -25,12 +26,37 @@ class RecaptchaVerifier {
 
   static const String url = 'https://www.google.com/recaptcha/api/siteverify';
 
-  Future verify(String response, {String remoteIp}) async {
+  Future<RecaptchaResponse> verify(String response, {String remoteIp}) async {
     final body = <String, String>{
       'secret': secret,
       'response': response,
     };
     if (remoteIp is String) body['remoteip'] = remoteIp;
-    await client.postForm(url, body: body);
+    final JsonResponse resp = await client.postForm(url, body: body);
+    return resp.deserialize(type: RecaptchaResponse);
+  }
+}
+
+/// Verifies that requests are actually submitted by a human
+class RecaptchaInterceptor extends Interceptor {
+  /// reCAPTCHA secret
+  final String secret;
+
+  const RecaptchaInterceptor(this.secret);
+
+  @override
+  Future<Null> pre(Context ctx) async {
+    if(ctx.req.headers['jaguar-recaptcha'] == null) {
+      throw new UnAuthorizedError();
+    }
+
+    final String captchaResp = ctx.req.headers.value('jaguar-recaptcha');
+
+    final verifier = new RecaptchaVerifier(new Client(), secret);
+
+    final RecaptchaResponse val = await verifier.verify(captchaResp);
+    if(!val.success) {
+      throw new UnAuthorizedError();
+    }
   }
 }

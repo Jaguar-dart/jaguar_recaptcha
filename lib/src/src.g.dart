@@ -21,14 +21,14 @@ abstract class _$RecaptchaResponseSerializer
         ret["success"] = model.success;
       }
       if (model.timestamp != null) {
-        ret["timestamp"] =
+        ret["challenge_ts"] =
             timestamp_TimestampSerializer.serialize(model.timestamp);
       }
       if (model.hostname != null) {
         ret["hostname"] = model.hostname;
       }
       if (model.errorCodes != null) {
-        ret["errorCodes"] =
+        ret["error-codes"] =
             errorCodes_ErrorSerializer.serialize(model.errorCodes);
       }
       if (modelString() != null && withType) {
@@ -48,10 +48,10 @@ abstract class _$RecaptchaResponseSerializer
     }
     model.success = map["success"];
     model.timestamp =
-        timestamp_TimestampSerializer.deserialize(map["timestamp"]);
+        timestamp_TimestampSerializer.deserialize(map["challenge_ts"]);
     model.hostname = map["hostname"];
     model.errorCodes =
-        errorCodes_ErrorSerializer.deserialize(map["errorCodes"]);
+        errorCodes_ErrorSerializer.deserialize(map["error-codes"]);
     return model;
   }
 
@@ -78,14 +78,14 @@ abstract class _$RecaptchaAndroidResponseSerializer
         ret["success"] = model.success;
       }
       if (model.timestamp != null) {
-        ret["timestamp"] =
+        ret["challenge_ts"] =
             timestamp_TimestampSerializer.serialize(model.timestamp);
       }
       if (model.apkPackageName != null) {
         ret["apkPackageName"] = model.apkPackageName;
       }
       if (model.errorCodes != null) {
-        ret["errorCodes"] =
+        ret["error-codes"] =
             errorCodes_ErrorSerializer.serialize(model.errorCodes);
       }
       if (modelString() != null && withType) {
@@ -105,10 +105,10 @@ abstract class _$RecaptchaAndroidResponseSerializer
     }
     model.success = map["success"];
     model.timestamp =
-        timestamp_TimestampSerializer.deserialize(map["timestamp"]);
+        timestamp_TimestampSerializer.deserialize(map["challenge_ts"]);
     model.apkPackageName = map["apkPackageName"];
     model.errorCodes =
-        errorCodes_ErrorSerializer.deserialize(map["errorCodes"]);
+        errorCodes_ErrorSerializer.deserialize(map["error-codes"]);
     return model;
   }
 

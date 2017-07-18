@@ -32,8 +32,7 @@ class RecaptchaVerifier {
       'response': response,
     };
     if (remoteIp is String) body['remoteip'] = remoteIp;
-    final JsonResponse resp = await client.postForm(url, body: body);
-    return resp.deserialize(type: RecaptchaResponse);
+    return await client.postForm(url, body: body, type: RecaptchaResponse);
   }
 }
 
@@ -46,7 +45,7 @@ class RecaptchaInterceptor extends Interceptor {
 
   @override
   Future<Null> pre(Context ctx) async {
-    if(ctx.req.headers['jaguar-recaptcha'] == null) {
+    if (ctx.req.headers['jaguar-recaptcha'] == null) {
       throw new UnAuthorizedError();
     }
 
@@ -55,7 +54,7 @@ class RecaptchaInterceptor extends Interceptor {
     final verifier = new RecaptchaVerifier(new Client(), secret);
 
     final RecaptchaResponse val = await verifier.verify(captchaResp);
-    if(!val.success) {
+    if (!val.success) {
       throw new UnAuthorizedError();
     }
   }

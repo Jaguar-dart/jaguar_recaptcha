@@ -8,12 +8,16 @@ class _TimestampSerializer implements FieldProcessor<DateTime, String> {
 
   @override
   String serialize(DateTime value) {
+    if(value == null) return null;
     final formatter = new DateFormat("yyyy-MM-ddTHH:mm:ssZZ");
     return formatter.format(value);
   }
 
   @override
-  DateTime deserialize(String value) => DateTime.parse(value);
+  DateTime deserialize(String value) {
+    if(value == null) return null;
+    return DateTime.parse(value);
+  }
 }
 
 @DefineFieldProcessor()
@@ -24,12 +28,16 @@ class _ErrorSerializer
   const _ErrorSerializer(this.field);
 
   @override
-  List<int> serialize(List<RecaptchaError> value) =>
-      value.map((RecaptchaError v) => v.id).toList();
+  List<int> serialize(List<RecaptchaError> value) {
+    if(value == null) return null;
+    return value.map((RecaptchaError v) => v.id).toList();
+  }
 
   @override
-  List<RecaptchaError> deserialize(List<int> value) =>
-      value.map((int v) => RecaptchaError.values[v]).toList();
+  List<RecaptchaError> deserialize(List<int> value) {
+    if(value == null) return null;
+    return value.map((int v) => RecaptchaError.values[v]).toList();
+  }
 }
 
 final JsonRepo _repo = new JsonRepo(serializers: [
@@ -40,6 +48,8 @@ final JsonRepo _repo = new JsonRepo(serializers: [
 @GenSerializer()
 @_TimestampSerializer(#timestamp)
 @_ErrorSerializer(#errorCodes)
+@EnDecodeField(#timestamp, asAndFrom: 'challenge_ts')
+@EnDecodeField(#errorCodes, asAndFrom: 'error-codes')
 class RecaptchaResponseSerializer extends Serializer<RecaptchaResponse>
     with _$RecaptchaResponseSerializer {
   @override
@@ -49,6 +59,8 @@ class RecaptchaResponseSerializer extends Serializer<RecaptchaResponse>
 @GenSerializer()
 @_TimestampSerializer(#timestamp)
 @_ErrorSerializer(#errorCodes)
+@EnDecodeField(#timestamp, asAndFrom: 'challenge_ts')
+@EnDecodeField(#errorCodes, asAndFrom: 'error-codes')
 class RecaptchaAndroidResponseSerializer
     extends Serializer<RecaptchaAndroidResponse>
     with _$RecaptchaAndroidResponseSerializer {

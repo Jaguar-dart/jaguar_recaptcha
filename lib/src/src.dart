@@ -4,11 +4,11 @@
 library jaguar_recaptcha.src;
 
 import 'dart:async';
-import 'package:intl/intl.dart';
-import 'package:http/http.dart';
+import 'package:date_format/date_format.dart';
+import 'package:http/http.dart' as ht;
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar_client/jaguar_client.dart';
-import 'package:jaguar_serializer/serializer.dart';
+import 'package:jaguar_serializer/jaguar_serializer.dart';
 
 part 'src.g.dart';
 
@@ -21,7 +21,7 @@ class RecaptchaVerifier {
 
   final SerializedJsonClient client;
 
-  RecaptchaVerifier(Client client, this.secret)
+  RecaptchaVerifier(ht.Client client, this.secret)
       : client = new JsonClient(client, repo: _repo).serialized();
 
   static const String url = 'https://www.google.com/recaptcha/api/siteverify';
@@ -46,16 +46,16 @@ class RecaptchaInterceptor extends Interceptor {
   @override
   Future<Null> pre(Context ctx) async {
     if (ctx.req.headers['jaguar-recaptcha'] == null) {
-      throw new UnAuthorizedError();
+      throw new Response('Unauthorized!', statusCode: 401);
     }
 
     final String captchaResp = ctx.req.headers.value('jaguar-recaptcha');
 
-    final verifier = new RecaptchaVerifier(new Client(), secret);
+    final verifier = new RecaptchaVerifier(new ht.Client(), secret);
 
     final RecaptchaResponse val = await verifier.verify(captchaResp);
     if (!val.success) {
-      throw new UnAuthorizedError();
+      throw new Response('Unauthorized!', statusCode: 401);
     }
   }
 }

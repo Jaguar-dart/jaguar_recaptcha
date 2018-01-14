@@ -10,9 +10,8 @@ part of jaguar_recaptcha.src;
 abstract class _$RecaptchaResponseSerializer
     implements Serializer<RecaptchaResponse> {
   final _TimestampSerializer timestamp_TimestampSerializer =
-      const _TimestampSerializer(#timestamp);
-  final _ErrorSerializer errorCodes_ErrorSerializer =
-      const _ErrorSerializer(#errorCodes);
+      const _TimestampSerializer();
+  final _ErrorSerializer errorCodes_ErrorSerializer = const _ErrorSerializer();
 
   Map toMap(RecaptchaResponse model, {bool withType: false, String typeKey}) {
     Map ret = new Map();
@@ -66,9 +65,8 @@ abstract class _$RecaptchaResponseSerializer
 abstract class _$RecaptchaAndroidResponseSerializer
     implements Serializer<RecaptchaAndroidResponse> {
   final _TimestampSerializer timestamp_TimestampSerializer =
-      const _TimestampSerializer(#timestamp);
-  final _ErrorSerializer errorCodes_ErrorSerializer =
-      const _ErrorSerializer(#errorCodes);
+      const _TimestampSerializer();
+  final _ErrorSerializer errorCodes_ErrorSerializer = const _ErrorSerializer();
 
   Map toMap(RecaptchaAndroidResponse model,
       {bool withType: false, String typeKey}) {

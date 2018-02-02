@@ -37,14 +37,16 @@ class RecaptchaVerifier {
 }
 
 /// Verifies that requests are actually submitted by a human
-class RecaptchaInterceptor extends Interceptor {
+class RecaptchaInterceptor extends Interceptor<Null> {
   /// reCAPTCHA secret
   final String secret;
 
   const RecaptchaInterceptor(this.secret);
 
+  Null get output => null;
+
   @override
-  Future<Null> pre(Context ctx) async {
+  Future before(Context ctx) async {
     if (ctx.req.headers['jaguar-recaptcha'] == null) {
       throw new Response('Unauthorized!', statusCode: 401);
     }
